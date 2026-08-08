@@ -18,7 +18,7 @@ export function getNamespace() {
 
 export function getDbEnv() {
   return {
-    endpoint: (process.env.SURREAL_ENDPOINT || "").trim(),
+    endpoint: (process.env.SURREAL_URL || "").trim(),
     username: (process.env.SURREAL_USERNAME || "").trim(),
     password: (process.env.SURREAL_PASSWORD || "").trim(),
     database: (process.env.SURREAL_DATABASE || "").trim(),

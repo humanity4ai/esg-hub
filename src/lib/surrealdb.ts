@@ -4,7 +4,7 @@ import { createLogger, redact } from "@/lib/logger";
 const logger = createLogger("surrealdb");
 
 // Credentials are sourced exclusively from environment variables.
-// Set SURREAL_ENDPOINT, SURREAL_USERNAME, SURREAL_PASSWORD,
+// Set SURREAL_URL, SURREAL_USERNAME, SURREAL_PASSWORD,
 // SURREAL_NAMESPACE, and SURREAL_DATABASE in your deployment environment.
 // NOTE: Access env vars inside functions, not at module level, for Vercel compatibility
 
@@ -17,7 +17,7 @@ function getEnvVars() {
   // .trim() guards against trailing newlines from how secrets were stored
   // (e.g. `echo "value" | gh secret set` appends a newline to the value).
   return {
-    endpoint: (process.env.SURREAL_ENDPOINT || "").trim(),
+    endpoint: (process.env.SURREAL_URL || "").trim(),
     username: (process.env.SURREAL_USERNAME || "").trim(),
     password: (process.env.SURREAL_PASSWORD || "").trim(),
     namespace: "esg_hub",

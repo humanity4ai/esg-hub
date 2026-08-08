@@ -11,6 +11,15 @@
       "type": "remote",
       "url": "https://mcp.grep.app",
       "enabled": true
+    },
+    "esg-hub": {
+      "enabled": true
+    },
+    "surrealdb": {
+      "enabled": true
+    },
+    "vercel": {
+      "enabled": true
     }
   }
 }
