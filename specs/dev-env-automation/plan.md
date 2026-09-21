@@ -13,7 +13,7 @@ Three planes, all changes declarative and revertible:
 2. **GitHub plane** — repo settings via REST API (rulesets, vulnerability alerts, security analysis), workflow YAML, `.github/` templates, Dependabot config
 3. **Vercel plane** — project settings via REST API (`nodeVersion`, `ssoProtection`), deploy mechanism moved into GitHub Actions build
 
-Deploy flow after fix: `push main → check job (lint→tsc→vitest→build) → deploy job (checkout + tool_packages symlink → vercel pull/build --prod → vercel deploy --prebuilt --prod) → E2E vs live URL → notify n8n on failure`.
+Deploy flow after fix: `push main → check job (lint→tsc→vitest→build) → deploy job (checkout + tool_packages symlink → vercel pull/build --prod → vercel deploy --prebuilt --prod) → E2E vs live URL`.
 
 ## Key Decisions
 
@@ -87,21 +87,6 @@ All `scripts/*.mjs` that currently read `SURREAL_NAMESPACE` (or hardcode their o
 
 `.github/workflows/nightly.yml`, cron `17 18 * * *` (~02:17 HKT): (1) `node scripts/verify-db-schema.mjs` with SURREAL_* secrets; (2) smoke: `curl -sf` `/en` and `/api/v1` on the prod domain; (3) lychee broken-link check on key pages (`/en`, `/en/videos`, `/en/books`, `/api/v1`) with `--retry 2 --timeout 20 --accept 200,204,301,302,307,308,429` to avoid rate-limit flakiness (R8). On failure: dedup issue via `gh issue list --label nightly-alert` → create or comment.
 
-### D8 — Failure notifications (AC-G1, AC-GE1)
-
-Reusable step appended to `deploy.yml`, `test.yml`, `nightly.yml`:
-
-```yaml
-- name: Notify n8n on failure
-  if: failure()
-  continue-on-error: true
-  run: curl -sf -X POST "$N8N_WEBHOOK_URL" -H 'Content-Type: application/json' -d '{"workflow":"${{ github.workflow }}","run":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}","repo":"${{ github.repository }}"}' || true
-  env:
-    N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
-```
-
-Non-blocking by construction (AC-GE1). Secret `N8N_WEBHOOK_URL` added via `gh secret set` once the user supplies the URL (prerequisite).
-
 ### D9 — On-demand test workflow (AC-B1)
 
 `.github/workflows/test.yml` on `workflow_dispatch` with inputs `base_url` (default `https://esg-hub.ascent.partners`) and `skip_e2e` (boolean, default false). Mirrors the `check` job (incl. tool_packages checkout + symlink via `TOOL_PACKAGES_PAT`), then an E2E job with `BASE_URL` + `CI=true` unless skipped. Contract: `contracts/automation-workflows.md`.
@@ -157,7 +142,7 @@ Non-blocking by construction (AC-GE1). Secret `N8N_WEBHOOK_URL` added via `gh se
 
 Phase 1 (WS-A+B): T-01…T-14 — identity → deploy fix → Vercel settings → code/DB/script fixes → test.yml → AGENTS.md → ci-cd-process amend.
 Phase 2 (WS-C+D): ruleset, Dependabot, security toggles/gitleaks.
-Phase 3 (WS-E+F+G): PR template, title lint, nightly, n8n notify, final re-sweep into log-review.md.
+Phase 3 (WS-E+F+G): PR template, title lint, nightly, final re-sweep into log-review.md.
 
 ## Contracts (locked after Gate 2)
 

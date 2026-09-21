@@ -18,7 +18,7 @@ File: `~/.config/opencode/opencode.json` (outside repo; changes backed up to `op
 
 ## Unchanged (verified working in baseline)
 
-`context7`, `playwright`, `perplexity`, `esg-hub`, `gh_grep`, `postgres`, `n8n`, `humanity4ai`, `clerk` — each gets one live verification call during implementation (spec AC-14 scope: perplexity/brave/google/browserless; the rest are smoke-checked only if touched).
+`context7`, `playwright`, `perplexity`, `esg-hub`, `gh_grep`, `postgres`, `humanity4ai`, `clerk` — each gets one live verification call during implementation (spec AC-14 scope: perplexity/brave/google/browserless; the rest are smoke-checked only if touched).
 
 ## Out of scope (remain disabled)
 

@@ -67,3 +67,9 @@ e2e/            # Playwright E2E tests
 scripts/        # DB migrations, content tools, schema verification
 messages/       # Translation files (en.json, zh.json, hi.json)
 ```
+
+## Decisions
+
+- [RESOLVED 2026-09-21] Workflow automation formerly on n8n is consolidated on
+  Python + systemd timers on SWAS. n8n MCP configuration, workflow templates, and
+  all references were removed on this date.

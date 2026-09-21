@@ -163,7 +163,7 @@ Then the pipeline fails and does not proceed to deployment
 - Infrastructure-as-code for Vercel project settings (already configured)
 - Load testing or performance regression testing in CI
 - Automated rollback on E2E failure (manual triage first)
-- Notifications (Slack, email) for deploy status — handle via n8n separately
+- Notifications (Slack, email) for deploy status
 - Preview deployment cleanup (stale preview URLs)
 - Code coverage thresholds (can add later)
 

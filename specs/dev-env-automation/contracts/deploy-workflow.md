@@ -22,7 +22,6 @@ deploy:
     # 9. Install Playwright: pnpm exec playwright install chromium
     # 10. E2E: pnpm test   env: BASE_URL=${{ steps.deploy.outputs.deploy_url }}, CI=true
     # 11. Upload playwright-report artifact (if: always()) — unchanged
-    # 12. Notify n8n on failure (if: failure(), continue-on-error: true) — see automation-workflows.md §Notify
 ```
 
 ## Invariants

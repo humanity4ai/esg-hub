@@ -58,7 +58,7 @@ Depends on: PR-1 merged (workflows green); T-15 ordered before PR-2 so PR-2 exer
 | T-19 [P] | `.github/PULL_REQUEST_TEMPLATE.md` per contract §4 | S | **AC-E1**: template renders on next PR |
 | T-20 [P] | `.github/workflows/pr-title.yml` per contract §3 | S | **AC-E2**: non-conforming title fails check (test on PR-3 itself — title intentionally conforming; rely on grep logic review + one edited-title experiment if desired) |
 | T-21 [P] | `.github/workflows/nightly.yml` per contract §2 | M | **AC-F1**: `gh workflow run nightly.yml` → green; **AC-F2**: dedup-issue logic reviewed (failure path exercised only if a check fails) |
-| T-22 | ~~n8n notify step + secret~~ **CANCELLED 2026-07-19** — user deferred WS-G (no webhook URL); spec AC-G1/GE1 → WONT this iteration | — | — |
+| T-22 | ~~failure notify step + secret~~ **CANCELLED 2026-07-19** — user deferred WS-G (no webhook URL); spec AC-G1/GE1 → WONT this iteration | — | — |
 | T-23 | Final re-sweep (**AC-A12**): last 10 Actions runs, last 10 Vercel deployments, `verify:db`, prod smoke, MCP table, settings read-backs → complete Resolution Log in `log-review.md`; drift check vs spec.md | M | every F-item resolved or documented; Phase 5 validate report |
 
 **PR-3** (contains T-19, T-20, T-21): merge → close-out.
@@ -71,7 +71,7 @@ Depends on: PR-1 merged (workflows green); T-15 ordered before PR-2 so PR-2 exer
 - [x] Every task carries its verification (live read-back per plan Test Strategy)
 - [x] Dependencies form a DAG (identity → phase-1 fixes → PR-1 → ruleset → PR-2 → phase-3 → re-sweep)
 - [x] Ruleset sequenced AFTER workflow fixes are green (avoids self-lockout)
-- [x] Blocked item explicit (T-22 needs n8n webhook URL)
+- [x] Blocked item explicit (T-22 needs webhook URL)
 
 ## Open decision (must resolve before T-15)
 
@@ -79,4 +79,4 @@ Depends on: PR-1 merged (workflows green); T-15 ordered before PR-2 so PR-2 exer
 
 ## Prerequisites outstanding
 
-- n8n webhook URL (T-22) — provide before Phase 3.
+None.

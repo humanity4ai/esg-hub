@@ -67,7 +67,6 @@ Purpose: record of environment state before/after each change per spec `spec.md`
 | esg-hub (local) | 🟢 enabled, verified live (354 pages via prod API) | code default URL correct; README wrong (F11) |
 | gh_grep | 🟢 enabled | |
 | postgres | 🟢 enabled (DATABASE_URL set) | not yet exercised |
-| n8n | 🟢 enabled (N8N_API_KEY set) | not yet exercised |
 | humanity4ai | 🟢 enabled (`/mnt/c/git_repo/project_human` exists) | not yet exercised |
 | clerk | 🟢 enabled | not yet exercised |
 | brave-search | 🟡 disabled; BRAVE_API_KEY set | enable per spec |
@@ -91,7 +90,7 @@ Purpose: record of environment state before/after each change per spec `spec.md`
 | F10 password fallback | removed from `verify-db-schema.mjs:13` | line now `\|\| ""` | 2026-07-19 |
 | F11 dead domain refs | fixed robots.ts, constants.ts, videos/page.tsx, mcp README | grep = 0 hits; live robots.txt → ascent.partners sitemap | 2026-07-19 |
 | F12 MCP config | opencode.json: github→`SIMONPLMAK_CLOUD_PAT`; brave-search/google-search **globally installed** (npx cold-start broke handshake); browserless + vercel remote configured | **github ✓** (simonplmak-cloud). **browserless ✓** (screenshot). **brave-search/google-search: servers load + tools execute ✓, but API keys rejected** — BRAVE_API_KEY → 422 SUBSCRIPTION_TOKEN_INVALID; GOOGLE_API_KEY → "API key not valid" (user must refresh both keys). vercel: `needs_auth` → `opencode mcp auth vercel` | 2026-07-20 |
-| F19 other MCP failures (discovered in startup logs) | n8n remote: `needs_auth` (N8N_API_KEY expired/invalid); playwright, postgres, humanity4ai: failed at session start (cold-start/env — playwright npx slowness, postgres needs local DB at localhost:5432, humanity4ai needs `/mnt/c/git_repo/project_human` running) | logged 2026-07-20; outside spec scope — user decides | 2026-07-20 |
+| F19 other MCP failures (discovered in startup logs) | playwright, postgres, humanity4ai: failed at session start (cold-start/env — playwright npx slowness, postgres needs local DB at localhost:5432, humanity4ai needs `/mnt/c/git_repo/project_human` running) | logged 2026-07-20; outside spec scope — user decides | 2026-07-20 |
 | F13 no on-demand tests | `.github/workflows/test.yml` (workflow_dispatch) | run 29689564162: check+e2e success vs production | 2026-07-19 |
 | F14 zero automation | Dependabot (github-actions), vuln alerts (204), auto security fixes (on), PR template, PR-title lint, nightly health check, dedup-issue alerts; secret scanning → plan-blocked (422) → gitleaks job in test.yml | Dependabot PRs #4–6 opened same day; nightly dispatch green (29693468529); issue #8 auto-created on failure | 2026-07-19 |
 | F15 Vercel env vars missing `preview` target (all 6 keys) — preview deploys had no DB creds; E2E "Page Not Found" test failed on DB-error page | added `preview` target to the production entry of each key | env GET: all keys = [development, preview, production]; preview E2E then passed | 2026-07-19 |
@@ -157,7 +156,6 @@ Exposed-credential postures after publication: SurrealDB password — rotated be
 | F19: playwright MCP | ✅ rewired to global binary (`@playwright/mcp` cli.js) — was npx cold-start failure |
 | F19: postgres MCP | ✅ DB connection verified (`SELECT 1`); rewired to global binary with `{env:DATABASE_URL}` arg — was npx cold-start failure |
 | F19: humanity4ai MCP | ✅ built `mcp-servers/dist` (tsc), rewired to `node dist/bin.js` — was tsx/pnpm cold-start failure |
-| F19: n8n MCP | ✅ resolved 2026-07-20: OAuth-only server (API key irrelevant); user completed `opencode mcp auth n8n` — access token refreshed (valid, auto-renews via refresh token); static Bearer header removed from config |
 | F19: perplexity MCP | ✅ rewired to global binary (`@perplexity-ai/mcp-server` dist/index.js) — was npx cold-start failure |
 | F19: humanity4ai startup | ✅ root-caused + fixed 2026-07-20: `bin.ts` calls `main()` AND `mcp-server.ts` auto-runs `main()` on import → double `server.connect()` → fatal at boot. opencode now points at `dist/mcp-server.js` (single-connect path; valid JSON-RPC verified). **Upstream fix recommended in project_human:** remove the `main()` call from `bin.ts` (keep the auto-run) or vice versa. Timeout field note: opencode `timeout` = tools-fetch (default 5s), not boot |
 
@@ -173,7 +171,6 @@ Exposed-credential postures after publication: SurrealDB password — rotated be
 | postgres | ✅ | `SELECT 1` + `postgres_query` tool |
 | context7, gh_grep, clerk | ✅ | used throughout the project |
 | playwright | ✅ | loads clean (global binary) |
-| n8n | ✅ | OAuth refreshed by user; no startup failure |
 | vercel | ✅ | OAuth valid; no startup failure |
 | humanity4ai | ✅ | loads clean after double-`main()` fix (points at `dist/mcp-server.js`) |
 | google-search | ⊘ disabled | intentionally replaced by Brave |
@@ -187,7 +184,7 @@ Startup log after final restart: **zero `server unavailable` warnings** (2026-07
 
 1. **Enable Copilot** on simonplmak-cloud — ✅ DONE 2026-07-20: reviewer request for `copilot-pull-request-reviewer[bot]` now accepted on PR #4 (previously no-op'd). Ruleset `copilot_code_review` active → auto-requests on future PRs; review text generation is async (pending on PR #4 at log time; AC-C1 auto-fire to be confirmed on next PR)
 2. **Vercel MCP OAuth** — ✅ DONE 2026-07-20: tokens stored in `~/.local/share/opencode/mcp-auth.json`; vercel MCP tools load on next opencode restart (AC-15 verification = one MCP call listing deployments)
-3. **Refresh rejected API keys** in `~/.bashrc`: `BRAVE_API_KEY` (422 invalid) and `GOOGLE_API_KEY` (invalid) — search MCP servers themselves verified working. github + browserless verified ✓. (Optional: fix n8n/postgres/playwright/humanity4ai MCPs — see F19.)
+3. **Refresh rejected API keys** in `~/.bashrc`: `BRAVE_API_KEY` (422 invalid) and `GOOGLE_API_KEY` (invalid) — search MCP servers themselves verified working. github + browserless verified ✓. (Optional: fix postgres/playwright/humanity4ai MCPs — see F19.)
 3. **Rotate SurrealDB password** — committed fallback removed, but git history still contains it (until rotation, treat as exposed)
 4. **Fix dead YouTube links** (@EFRAG, @TNFD_ → 404 even with browser UA) in DB content — tracked in issue #8
 5. Review/merge Dependabot PRs #4–6 (action version bumps)

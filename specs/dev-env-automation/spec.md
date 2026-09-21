@@ -34,7 +34,7 @@ Full details in `log-review.md`. Summary:
 
 - As a **developer**, I want git, gh CLI, and the github MCP to authenticate as `simonplmak-cloud` so that I can push, inspect runs, and manage the repo from this machine.
 - As a **developer**, I want to trigger the full test suite on GitHub on demand so that I never run tests on this slow local machine.
-- As a **maintainer**, I want production deploys green again, `main` protected, dependency/security PRs arriving automatically, a nightly job watching prod + DB, and failures reaching me via n8n.
+- As a **maintainer**, I want production deploys green again, `main` protected, dependency/security PRs arriving automatically, and a nightly job watching prod + DB.
 - As a **reviewer**, I want every PR to automatically receive a Copilot review before I look at it.
 - As an **AI-agent operator**, I want every configured MCP server reachable and verified so that agent workflows don't silently use dead endpoints.
 
@@ -110,7 +110,7 @@ Full details in `log-review.md`. Summary:
 
 ### WS-G: Notifications (Phase 3) — DEFERRED
 
-- **AC-G1 [WONT — this iteration]** Deploy/test/nightly workflow failure POSTs to the n8n webhook. *Deferred 2026-07-19 per user decision (no webhook URL provided; GitHub email/UI notifications suffice for now). Revisit by re-scoping WS-G when an n8n webhook is available.*
+- **AC-G1 [REMOVED 2026-09-21]** Deploy/test/nightly workflow failure webhook notification. *Originally deferred 2026-07-19 per user decision (no webhook URL provided; GitHub email/UI notifications suffice). Retired with workflow automation.*
 - **AC-GE1 [WONT — this iteration]** Webhook outage never fails the workflow (moot while AC-G1 deferred).
 
 ## Non-Functional Requirements
@@ -137,6 +137,5 @@ Full details in `log-review.md`. Summary:
 - [RESOLVED] Vercel access → user-provided token (verified) + add Vercel MCP
 - [RESOLVED] Disabled MCPs → enable brave-search/google-search, repair browserless
 - [RESOLVED] DB index + namespace fixes → in scope (single spec)
-- [RESOLVED] Extension: single spec `dev-env-automation`; Copilot review; Dependabot tolerate-errors; n8n webhook notifications
-- [OPEN] n8n webhook URL — user provides at implementation time
+- [RESOLVED] Extension: single spec `dev-env-automation`; Copilot review; Dependabot tolerate-errors
 - [OPEN] Copilot subscription active on simonplmak-cloud? — verified at implementation (AC-CE1 fallback if absent)

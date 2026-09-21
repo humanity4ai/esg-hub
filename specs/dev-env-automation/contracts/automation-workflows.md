@@ -24,7 +24,6 @@ jobs:
     steps: [checkout, tool_packages+symlink, pnpm, node20, install, playwright install chromium, pnpm test]
     env: { BASE_URL: ${{ inputs.base_url }}, CI: "true" }
     # + playwright-report artifact upload (if: always())
-    # + Notify n8n on failure (§4)
 ```
 
 ## 2. `.github/workflows/nightly.yml` (new — AC-F1, AC-F2)
@@ -47,7 +46,6 @@ jobs:
       #      none: gh issue create --label nightly-alert --title "Nightly health check failed <date>" --body <run link + failing step>
       #      exists: gh issue comment <id> --body "Still failing: <run link>"
       #    env: GH_TOKEN=${{ secrets.GITHUB_TOKEN }}
-      # 6. Notify n8n on failure (§4)
 ```
 
 ## 3. PR-title lint (new — AC-E2), file `.github/workflows/pr-title.yml`
@@ -67,20 +65,3 @@ jobs:
 ```
 
 (No third-party action; pure bash.)
-
-## 4. Notify n8n on failure (reusable step — AC-G1, AC-GE1)
-
-Appended to `deploy.yml` (deploy job), `test.yml` (e2e job), `nightly.yml` (health job):
-
-```yaml
-- name: Notify n8n on failure
-  if: failure()
-  continue-on-error: true
-  env:
-    N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
-  run: |
-    curl -sf -X POST "$N8N_WEBHOOK_URL" -H 'Content-Type: application/json' \
-      -d '{"workflow":"${{ github.workflow }}","conclusion":"failure","run":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}","repo":"${{ github.repository }}","ref":"${{ github.ref_name }}"}' || true
-```
-
-Invariant: the notify step can never fail its job (`continue-on-error: true` + `|| true`).

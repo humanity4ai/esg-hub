@@ -78,7 +78,6 @@ Clean up verified-dead YouTube links in DB page content, review the curated v6 v
 - Fixing bot-blocked (403/415) outbound links
 - Full-site YouTube link audit beyond the two verified-dead handles and the integrated records
 - A dedicated `video` DB table or changes to the videos page rendering code
-- n8n notifications for this job
 
 ## Open Questions
 

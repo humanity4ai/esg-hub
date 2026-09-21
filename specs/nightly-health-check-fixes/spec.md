@@ -71,7 +71,7 @@ Review every error surfaced by the Nightly Health Check workflow since its creat
 
 - Content-side link fixes (all resolved — see Research Summary)
 - Changing the sweep URL list, schedule, or accept-list
-- Slack/n8n notifications (WS-G deferred in dev-env-automation)
+- Slack notifications (WS-G deferred in dev-env-automation)
 - Refactoring the smoke checks
 
 ## Open Questions
