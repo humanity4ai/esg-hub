@@ -1,7 +1,7 @@
 {
   "name": "@esg-hub/mcp-server",
   "version": "1.2.0",
-  "description": "MCP server for the ESG Hub knowledge base \u2014 provides AI agents with access to 307 ESG articles and 244 curated external resources",
+  "description": "MCP server for the ESG Hub knowledge base — provides AI agents with access to 307 ESG articles and 244 curated external resources",
   "type": "module",
   "bin": {
     "esg-hub-mcp": "./dist/index.js"
@@ -28,5 +28,8 @@
     "@types/node": "^20.0.0",
     "tsx": "^4.23.1",
     "typescript": "^5.0.0"
+  },
+  "overrides": {
+    "@hono/node-server": ">=1.19.15"
   }
 }
