@@ -28,5 +28,5 @@ jobs:
           KIMI_API_KEY: ${{ secrets.KIMI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          model: kimi-for-coding/k3
+          model: kimi-code-plan-global/k3
           use_github_token: true
