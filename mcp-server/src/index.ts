@@ -5,7 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 
 const BASE_URL = process.env.ESG_HUB_API_URL || "https://esg-hub.ascent.partners";
-const API_BASE = process.env.ESG_HUB_API_BASE || "http://localhost:3000";
+const API_BASE = process.env.ESG_HUB_API_BASE || BASE_URL;
 const WRITE_TOKEN = process.env.ESG_HUB_WRITE_TOKEN || "";
 
 /**
