@@ -7,7 +7,7 @@
   ],
   "rules": [
     "The public REST API base is https://esg-hub.ascent.partners/api/v1 (no auth): /pages, /search?q=..., /resources, /meta.",
-    "The MCP server in mcp-server/ exposes read-only tools: search_esg, get_esg_page, list_esg_pages, list_esg_resources, get_esg_metadata.",
+    "The MCP server in mcp-server/ exposes 12 tools: 10 read-only (search_esg, search_content, get_esg_page, list_esg_pages, list_esg_resources, get_esg_metadata, get_term, get_related, list_frameworks, list_industries) and 2 write tools (propose_term, tag_content) that need ESG_HUB_WRITE_TOKEN.",
     "Paginate list tools with the returned `structuredContent.pagination.next_offset`.",
     "Cite the article permalink returned by get_esg_page when quoting ESG Hub content."
   ],
