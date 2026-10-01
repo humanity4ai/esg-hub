@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.COPILOT_PAT || secrets.GITHUB_TOKEN }}
         with:
-          model: kimi-for-coding/k3
+          model: kimi-code-plan-global/k3
           use_github_token: true
           prompt: |
             You are the engineering supervisor for this repository. The GitHub
@@ -72,7 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.COPILOT_PAT || secrets.GITHUB_TOKEN }}
         with:
-          model: kimi-for-coding/k3
+          model: kimi-code-plan-global/k3
           use_github_token: true
           prompt: |
             You are the engineering supervisor for this repository. Load the
