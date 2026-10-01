@@ -43,13 +43,24 @@ node dist/index.js
 
 ## Available Tools
 
+12 tools: 10 read-only and 2 that write (both need `ESG_HUB_WRITE_TOKEN`).
+
 | Tool | Description | Annotations |
 |------|-------------|-------------|
-| `search_esg` | Full-text keyword search across all ESG content (BM25 ranking) | readOnly, closed-world |
-| `get_esg_page` | Retrieve the full content of a specific ESG article by permalink or slug | readOnly, idempotent |
-| `list_esg_pages` | List/filter ESG articles by section, pillar, or title — paginated | readOnly |
-| `list_esg_resources` | List/filter curated external ESG resources by domain or title — paginated | readOnly |
-| `get_esg_metadata` | Get database statistics (total pages, sections, pillars, domains) | readOnly, idempotent |
+| `search_esg` | Full-text keyword search across ESG articles (BM25 ranking) | read-only, idempotent |
+| `get_esg_page` | Full content of one ESG article by permalink or slug | read-only, idempotent |
+| `list_esg_pages` | List/filter ESG articles by section, pillar, or title, paginated | read-only, idempotent |
+| `list_esg_resources` | List/filter curated external ESG resources by domain or title, paginated | read-only, idempotent |
+| `get_esg_metadata` | Database statistics (pages, sections, pillars, domains) | read-only, idempotent |
+| `search_content` | Hybrid semantic + keyword search across all ESG Hub content | read-only, idempotent |
+| `get_term` | One glossary term with its definition and related frameworks | read-only, idempotent |
+| `get_related` | Traverse the knowledge graph from a page or term | read-only, idempotent |
+| `list_frameworks` | ESG reporting frameworks and standards (GRI, SASB, TCFD, ESRS, etc.) | read-only, idempotent |
+| `list_industries` | Industry taxonomy, for valid industry filter values | read-only, idempotent |
+| `propose_term` | Submit a glossary term for review (needs write token) | write, non-destructive |
+| `tag_content` | Update facet tags on a page (needs write token) | write, non-destructive, idempotent |
+
+By default the server calls the public API at `https://esg-hub.ascent.partners`; set `ESG_HUB_API_BASE` to point it elsewhere (for example a local `http://localhost:3000`).
 
 ### v1.1.0 behaviors
 

@@ -5,7 +5,7 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 
 const BASE_URL = process.env.ESG_HUB_API_URL || "https://esg-hub.ascent.partners";
-const API_BASE = process.env.ESG_HUB_API_BASE || "http://localhost:3000";
+const API_BASE = process.env.ESG_HUB_API_BASE || BASE_URL;
 const WRITE_TOKEN = process.env.ESG_HUB_WRITE_TOKEN || "";
 
 /**
@@ -165,9 +165,10 @@ function mapWriteError(err: unknown, notFoundHint?: string) {
 
 const server = new McpServer({
   name: "esg-hub",
-  version: "1.2.0",
+  title: "ESG Hub",
+  version: "1.3.0",
   description:
-    "Access the ESG Hub knowledge base — 307 articles and 244 curated external resources covering Environmental, Social, and Governance topics.",
+    "Access the ESG Hub knowledge base — ESG, sustainability and climate articles, a glossary, frameworks and curated external resources.",
 });
 
 // ── Tool: search_esg ────────────────────────────────────────────────────
@@ -180,7 +181,7 @@ server.tool(
     limit: z.number().min(1).max(50).default(10).describe("Maximum number of results to return"),
     source: z.enum(["all", "pages", "external"]).default("all").describe("Filter results by source type"),
   },
-  { readOnlyHint: true, openWorldHint: false },
+  { title: "Search ESG Hub", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async ({ query, limit, source }) => {
     try {
       const result = await apiGet<{
@@ -246,7 +247,7 @@ server.tool(
         "Page identifier — can be a permalink path (e.g., 'environmental/climate-change'), a slug (e.g., 'climate-change'), or a SurrealDB record ID (e.g., 'page:abc123')"
       ),
   },
-  { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
+  { title: "Read ESG Article", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async ({ page_id }) => {
     try {
       const result = await apiGet<{
@@ -314,7 +315,7 @@ server.tool(
     limit: z.number().min(1).max(100).default(20).describe("Number of results per page (use with offset for paging)"),
     offset: z.number().min(0).default(0).describe("Pagination offset — pass the previous response's next_offset to get the next page"),
   },
-  { readOnlyHint: true, openWorldHint: false },
+  { title: "List ESG Articles", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async ({ section, pillar, query, limit, offset }) => {
     try {
       const params: Record<string, string> = {
@@ -388,7 +389,7 @@ server.tool(
     limit: z.number().min(1).max(100).default(20).describe("Number of results per page (use with offset for paging)"),
     offset: z.number().min(0).default(0).describe("Pagination offset — pass the previous response's next_offset to get the next page"),
   },
-  { readOnlyHint: true, openWorldHint: false },
+  { title: "List ESG Resources", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async ({ domain, query, limit, offset }) => {
     try {
       const params: Record<string, string> = {
@@ -451,7 +452,7 @@ server.tool(
   "get_esg_metadata",
   "Get ESG Hub knowledge base statistics: total pages/resources, and the full lists of sections, pillars, and source domains with counts. Use before filtering with list_esg_pages or list_esg_resources to discover valid filter values.",
   {},
-  { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
+  { title: "ESG Hub Statistics", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async () => {
     try {
       const result = await apiGet<{
@@ -519,7 +520,7 @@ server.tool(
     query: z.string().min(1).describe("Search query (e.g., 'carbon emissions', 'board diversity', 'GRI standards')"),
     limit: z.number().min(1).max(50).default(10).describe("Maximum number of results to return"),
   },
-  { readOnlyHint: true, openWorldHint: false },
+  { title: "Search Pages and Terms", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async ({ query, limit }) => {
     try {
       const result = await apiGet<{
@@ -578,7 +579,7 @@ server.tool(
       .min(1)
       .describe("Term identifier — can be a slug (e.g., 'materiality'), a permalink path, or a SurrealDB record ID (e.g., 'term:abc123')"),
   },
-  { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
+  { title: "Look Up ESG Term", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async ({ term_id }) => {
     try {
       const [termResult, relatedResult] = await Promise.all([
@@ -652,7 +653,7 @@ server.tool(
       .optional()
       .describe("Optional filter: only return edges of this type (e.g., 'framework', 'term', 'related_pages')"),
   },
-  { readOnlyHint: true, openWorldHint: true },
+  { title: "Explore Related Content", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async ({ record_id, edge_type }) => {
     try {
       const result = await apiGet<{
@@ -716,7 +717,7 @@ server.tool(
     limit: z.number().min(1).max(100).default(20).describe("Number of results per page (use with offset for paging)"),
     offset: z.number().min(0).default(0).describe("Pagination offset — pass the previous response's next_offset to get the next page"),
   },
-  { readOnlyHint: true, openWorldHint: false },
+  { title: "List ESG Frameworks", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async ({ limit, offset }) => {
     try {
       const result = await apiGet<{
@@ -772,7 +773,7 @@ server.tool(
   "list_industries",
   "List all industry sectors tagged across the ESG Hub knowledge base. Returns a hardcoded industry taxonomy with names, sectors, and descriptions. Use to discover valid industry filter values for list_esg_pages or tag_content.",
   {},
-  { readOnlyHint: true, openWorldHint: false, idempotentHint: true },
+  { title: "List Industries", readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   async () => {
     const industries = [
       { name: "Financial Services & Insurance", sector: "Finance", description: "Banking, investment management, insurance, and capital markets" },
@@ -825,7 +826,7 @@ server.tool(
       .optional()
       .describe("Optional metadata facets for the term"),
   },
-  { readOnlyHint: false, destructiveHint: false },
+  { title: "Propose Glossary Term", readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
   async ({ name, definition, facets }) => {
     try {
       const body: Record<string, unknown> = { name, definition };
@@ -879,7 +880,7 @@ server.tool(
       })
       .describe("Facet tags to apply to the page"),
   },
-  { readOnlyHint: false, destructiveHint: false },
+  { title: "Tag Page Facets", readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   async ({ page_id, facets }) => {
     try {
       const result = await apiPatch<{

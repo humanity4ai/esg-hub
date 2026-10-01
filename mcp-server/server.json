@@ -1,0 +1,37 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.simonplmak-cloud/esg-hub",
+  "title": "ESG Hub",
+  "description": "Search and read ESG Hub: ESG, sustainability and climate articles, glossary terms and frameworks.",
+  "version": "1.3.0",
+  "websiteUrl": "https://esg-hub.ascent.partners",
+  "repository": {
+    "url": "https://github.com/simonplmak-cloud/esg-hub",
+    "source": "github",
+    "subfolder": "mcp-server"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@esg-hub/mcp-server",
+      "version": "1.3.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "ESG_HUB_API_BASE",
+          "description": "Override the ESG Hub API base URL (default https://esg-hub.ascent.partners)",
+          "isRequired": false
+        },
+        {
+          "name": "ESG_HUB_WRITE_TOKEN",
+          "description": "Write token, needed only for propose_term and tag_content",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
